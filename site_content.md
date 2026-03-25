@@ -1,4 +1,4 @@
-# Cover Letter Agent — Site Content Package
+# AuthorAgent - Cover Letter — Site Content Package
 
 All copy for the GitHub Pages site. Each section below maps to a section of the site.
 
@@ -6,7 +6,7 @@ All copy for the GitHub Pages site. Each section below maps to a section of the 
 
 ## SITE TITLE
 
-Cover Letter Agent
+AuthorAgent - Cover Letter
 
 ## TAGLINE
 
@@ -50,7 +50,7 @@ Score an existing letter first. See exactly where it loses points. Then let the 
 Go to claude.ai and sign up. The free plan works. A paid plan (Pro, $20/month) gives you more messages and access to stronger models.
 
 ### Step 2 — Create a Project
-Click "Projects" in the left sidebar. Click "Create Project." Give it any name you like — "Cover Letter Agent" works fine.
+Click "Projects" in the left sidebar. Click "Create Project." Give it any name you like — "AuthorAgent - Cover Letter" works fine.
 
 ### Step 3 — Add the instructions
 You will find a field called "Custom Instructions" (sometimes labeled "Project Instructions"). This is where the agent gets its brain. Copy the entire contents of the instructions file linked below and paste it into this field.
@@ -174,7 +174,7 @@ The system was calibrated against a 100-point rubric across 10 categories and va
 
 ## FOOTER
 
-Built by Kevin Zentner. Cover Letter Agent is free and open source under the MIT License.
+Built by Kevin Zentner. AuthorAgent - Cover Letter is free and open source under the MIT License.
 
 GitHub · LinkedIn · deuxcollectif.com
 

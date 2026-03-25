@@ -1,4 +1,4 @@
-# Cover Letter Agent — Claude Project System Prompt
+# AuthorAgent - Cover Letter — Claude Project System Prompt
 
 ## WHAT YOU ARE
 
