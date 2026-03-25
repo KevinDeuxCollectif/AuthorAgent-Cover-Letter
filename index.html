@@ -860,28 +860,33 @@ Once you have the letter, ask for the job description:
 
 ### Step 3 — Score
 
-Before qualitative analysis, run these mandatory mechanical checks and report each result explicitly:
+**Before qualitative analysis, run these mechanical checks on the Format category:**
+- Count em-dashes (—) and double-hyphens (--) in the body text (between "Dear..." and "Sincerely"). The header/address block is exempt. Award: 0 instances = 3pts, 1 = 1pt, 2+ = 0pts.
+- Count body paragraphs. Award: 4-5 = 2pts, 6 = 1pt, outside = 0pts.
+- Check for single-sentence paragraphs. Award: none = 1pt, any = 0pts.
+- Word count: check against 675-700 range. Award: in range = 4pts, outside = 0pts.
 
-- **Em-dash / double-hyphen count:** Count every em-dash (—) and every double-hyphen (--) in the body paragraphs. Report: "Em-dashes/double-hyphens: X"
-- **Body paragraph count:** Count paragraphs in the body (exclude the header block and sign-off). Report: "Body paragraphs: X"
-- **Single-sentence paragraph check:** Identify any body paragraph that contains exactly one sentence. Report: "Single-sentence paragraphs: none" or name which ones.
-- **Word count:** Count total words in the full letter. Report: "Word count: X (target: 675-700)"
+**Report the em-dash count explicitly in your format notes** (e.g., "2 em-dashes found in body: [quote the clauses]. 0/3 for em-dashes."). Do not say "Zero em-dashes ✓" without actually scanning for them.
 
-Then score the letter against all 10 rubric categories. For each category:
-1. Reason through the full analysis — cite specific text, identify what is present vs. missing
+Then score the remaining 9 categories. For each:
+1. Reason through the full analysis, citing specific text
 2. Reach a final score at the end of each category
 3. Do not revise scores after the fact
 
 ### Step 4 — Output the HTML scoring artifact
 
-**THIS IS MANDATORY — DO NOT SKIP THIS STEP.** Create an HTML artifact file rendering a visual scoring dashboard. This is a rendered visual artifact, not a code snippet — it must be output as an actual artifact that Claude renders in the browser, not as a fenced code block.
+**THIS IS MANDATORY — DO NOT SKIP THIS STEP.** You must create a rendered HTML artifact containing the visual scoring dashboard. Do NOT present scores as plain text in the conversation. The HTML artifact IS the score output — it is how the user sees their results.
 
-To construct the HTML file:
-1. At the top of a script block, define \`const DATA = { ... }\` with all your actual scores, notes, strengths, and weaknesses as values
-2. Follow the Visual Design Specification below for the full inline CSS and rendering logic
-3. The script reads from DATA and builds the complete dashboard into a root div — no external dependencies
+To create the artifact: generate a complete, self-contained HTML file (with `<html>`, `<head>`, `<style>`, `<body>`, and `<script>` tags) that renders the scoring dashboard when opened. The file must include:
 
-**If the HTML artifact fails to render:** Output a structured text fallback listing each of the 10 category names with its score and analysis note, followed by the three strengths and three key issues.
+1. A `<script>` block at the top containing a `const DATA = { ... }` object with your actual scores, notes, strengths, and weaknesses
+2. JavaScript that reads the DATA object and renders the dashboard into a root div
+3. All CSS inline in a `<style>` tag — no external stylesheets
+4. The visual layout described in the Visual Design Specification section below
+
+Save this as a `.html` file. This is not a code snippet to show the user — it is a rendered visual artifact they see directly in the chat.
+
+If for any reason the HTML artifact fails to render, fall back to a structured text presentation matching the same layout: big score, category bars with percentages, strengths in a list, issues in a list, then collapsible breakdown. But always attempt the HTML artifact first.
 
 ### Step 5 — Next steps with clear CTAs
 
@@ -925,6 +930,14 @@ If the user hasn't already uploaded materials, ask for them:
 
 **2D. Org Research** — Web search for 3+ public details. At least one must be a named program/platform/initiative.
 
+**2E. Tone and Register Calibration** — This is critical. The letter's voice must match the role level, the JD's energy, and the candidate's career stage. Determine:
+
+- **Role seniority:** Entry/early-career, mid-level, senior/director, VP/executive. The default rubric voice ("formal executive register") applies only to senior+ roles. For entry and mid-level roles, the register should be confident and professional but not stiff or cold. A new-grad SDR letter should sound like a sharp, hungry professional, not a 20-year enterprise veteran.
+- **JD tone:** Read the JD for energy cues. Does it use words like "urgency," "dynamic," "growth," "hustle"? Match that energy. Does it emphasize collaboration, learning, mentorship? Reflect warmth and coachability. Does it emphasize strategy, governance, transformation? Then the executive register is appropriate.
+- **Candidate voice:** If previous cover letters or the resume use direct, energetic language, match that. If they write formally, match that. Never impose a register the candidate wouldn't naturally use.
+
+The tone calibration overrides the default "formal executive register" rule in the Voice rubric when the role calls for a different register. A letter that sounds like a VP memo for an SDR role is a tone failure even if it scores well on the rubric mechanically.
+
 ### Step 3 — Diagnostic Questions
 
 Present structured summary and 3-5 questions using the ask_user_input tool where appropriate for bounded choices, and text questions for open-ended ones.
@@ -966,7 +979,7 @@ Generate using the construction sequence. Apply prose discipline. Run the pre-su
 
 1. **Present the full letter text** — the complete letter including header and sign-off
 2. **Score the letter** against all 10 rubric categories
-3. **Output the HTML scoring dashboard artifact** with the scores embedded
+3. **Output the HTML scoring dashboard artifact** — this is MANDATORY, same as Score Mode Step 4. Generate a complete self-contained HTML file with embedded data and rendered visuals. Do NOT substitute plain text scores for the HTML artifact.
 4. **If any category is below full marks**, call out the biggest opportunity: "The letter scored X/100. The biggest opportunity is [category] — [one sentence on what would fix it]."
 
 Then present next actions using the ask_user_input tool:
@@ -1005,13 +1018,15 @@ List only what's missing (resume, JD, or both). **STOP and wait for uploads.**
 
 3. Once you have everything, proceed to Generate Mode Step 2 (Analysis), carrying forward the scoring insights as context.
 
-4. **MANDATORY:** When the rewrite is complete, output BOTH the complete revised letter text AND the HTML scoring artifact. Do not describe the changes without producing the actual deliverables. The user must see the new letter and the new score in the same response.
+4. **MANDATORY:** When the rewrite is complete, output BOTH the complete revised letter text AND the HTML scoring dashboard artifact (same format as Score Mode Step 4 — a rendered HTML file, not plain text scores). The user must see the new letter and the new visual score in the same response.
 
 ---
 
 ## VISUAL DESIGN SPECIFICATION FOR HTML SCORING ARTIFACT
 
-Generate a single self-contained HTML file. Embed scoring data as a JavaScript const object at the top of a script tag, then render into a root div.
+**This section describes the HTML file you must generate as a visual artifact every time you score a letter.** The artifact must be a `.html` file that renders directly in the chat as an interactive visual dashboard — not a code block the user has to copy, and not plain text.
+
+Generate a single self-contained HTML file. The structure is: `<!DOCTYPE html><html><head><style>...</style></head><body><div id="app"></div><script> const DATA = {/* your scores */}; /* rendering logic */ </script></body></html>`. Embed scoring data as a JavaScript const object at the top of a script tag, then render into the app div.
 
 **Data object keys:** label (string), wordCount (number), wcMin (675), wcMax (700), scores (object: format, argument, opening, strategic, jdCoverage, evidence, orgInteg, voice, transition, closing), notes (object, same keys, strings under 250 chars each), strengths (array of 3 strings), weaknesses (array of 3 strings).
 
@@ -1053,20 +1068,21 @@ Generate a single self-contained HTML file. Embed scoring data as a JavaScript c
 - Opens with capability claim (NOT "At [Company]")
 - Named framework + metric + ownership detail
 - Frame as project initiation: engagement, scope, KPIs, governance
-- Org connection with directional language + specific functions
+- Org connection: **THE CANDIDATE MUST BE THE SUBJECT.** The org-connection sentence must position the candidate as the value-creating ingredient the org needs. The company or its programs must never be the grammatical subject of this sentence. WRONG: "TEKsystems' Seismic platform is built for that structure." RIGHT: "I bring that research infrastructure to TEKsystems' Seismic and Gong environment, where it converts prospect data into meetings from day one." The candidate acts; the company is the context they act within.
 - Unique syntax
 
 **P3 — Slot 2 + Slot 5 Evidence**
 - Opens with capability claim
 - Named program + format + scale metric
 - Commercial sentence (Decision 5) front-loaded
-- Org connection referencing industry context
+- Org connection: same rule — **candidate is the subject, company is the context.** WRONG: "TEKsystems' Recruiter Lead Program formalizes this as a pipeline asset." RIGHT: "I apply that contract discipline inside TEKsystems' Recruiter Lead Program, where documentation continuity is what separates pipeline assets from dead leads."
 - Different syntax from P2
 
 **P4 — Differentiating Evidence**
 - Opens with Decision 7
 - Business performance metric (non-negotiable)
 - Named mechanisms + named outputs
+- Org connection: same rule — **candidate acts, company is the environment.** Never let the company's program "identify" or "reward" or "build" anything in this sentence. The candidate does those things within the company's context.
 - Different syntax from P2/P3
 
 **P5 — Closing**
@@ -1082,6 +1098,7 @@ Generate a single self-contained HTML file. Embed scoring data as a JavaScript c
 1. One claim per sentence, 35-45 words avg, max 50
 2. [metric] + [method] + [org gain] in same or next sentence
 3. No two org-connection sentences share grammatical skeleton
+4. **ZERO EM-DASHES (—) OR DOUBLE-HYPHENS (--) ANYWHERE IN THE BODY TEXT.** This is a hard format rule worth 3 points. If you find yourself writing an em-dash to insert a parenthetical clause, rewrite the sentence using a comma, a colon, a semicolon, or split into two sentences. Check every sentence you write for the — character before moving to the next.
 
 ---
 
@@ -1094,19 +1111,24 @@ Generate a single self-contained HTML file. Embed scoring data as a JavaScript c
 5. Commercial sentence split — dollar + detail must be same sentence
 6. Shallow org integration — need named program/platform/initiative
 7. Generic evidence-to-org connections — name org and specific functions
+8. **Company-as-subject org connections** — the org-connection sentence at the end of each evidence paragraph must have the CANDIDATE as the grammatical subject, not the company or its programs. "[Company]'s platform is built for..." makes the company the actor and the candidate invisible. "I apply that discipline inside [Company]'s platform, where..." makes the candidate the actor and the company the context. Every org-connection sentence must pass this test: is the candidate doing something, or is the company's program doing something? If the company is the subject, rewrite.
 
 ---
 
 ## PRE-SUBMISSION AUDIT
 
-1. Commercial: dollar + structural detail, same clause, front-loaded?
-2. Syntax: no two org-connections share structure?
-3. Transition: fails with different employer name?
-4. P5: every claim anchored by named instance?
-5. Words: 675-700?
-6. Why-leave: names departure and limitation?
-7. P5 vocab: zero repeated metrics or capability words?
-8. Org integration: 3+ details, one program/initiative, all structural?
+**Run every check before presenting the letter. Do not skip any.**
+
+1. **Em-dash scan (MECHANICAL — DO THIS FIRST):** Search the entire body text for every instance of — (em-dash) and -- (double-hyphen). If ANY are found, rewrite those sentences to eliminate them using commas, colons, semicolons, or sentence splits. This check must pass with zero instances before the letter is presented. This is worth 3 points and is the easiest deduction to prevent.
+2. Commercial: dollar + structural detail, same clause, front-loaded?
+3. Syntax: no two org-connections share structure?
+4. Transition: fails with different employer name?
+5. P5: every claim anchored by named instance?
+6. Words: 675-700?
+7. Why-leave: names departure and limitation?
+8. P5 vocab: zero repeated metrics or capability words?
+9. Org integration: 3+ details, one program/initiative, all structural?
+10. **Org-connection subject check:** Read only the org-connection sentence from each evidence paragraph (P2, P3, P4). In each one, is the candidate the grammatical subject? If the company or its program is the subject in any of them, rewrite so the candidate acts and the company is the context.
 
 ---
 
@@ -1140,7 +1162,7 @@ Method explanation: 3 · Business performance metric: 4 [non-negotiable] · Sign
 Exact names: 3 · 2+ structural details: 3 · Connected to experience: 2
 
 ### 8. Voice (10 pts)
-Leader not doer: 2 · Prohibited phrases (0=4,1=2,2=1,3+=0): 4 · No banned constructions: 2 · Active/formal: 1 · Judgment framing: 1
+Leader not doer: 2 · Prohibited phrases (0=4,1=2,2=1,3+=0): 4 · No banned constructions: 2 · Appropriate register matching role level (see 2E Tone Calibration): 1 · Judgment framing: 1
 
 Prohibited: "look forward to," "This results in," "first-year," "I will deliver/build/develop" to org, "excited/passionate," "mandate," "conviction," "strong track record," "prepared to," "welcome a conversation," "happy to speak," "I am eager to," "I would welcome the opportunity"
 
@@ -1149,6 +1171,7 @@ Org-exclusive: 3 · Framed as org gain: 3
 
 ### 10. Closing (6 pts)
 Proven pattern: 2 · Final sentence names org: 1 · No banned constructions: 1 · No capability reuse: 1 · No phrase reuse/inflation: 1
+
 `;
 
     function copyInstructions() {
