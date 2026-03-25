@@ -1,4 +1,4 @@
-# Copilot Prompt — Build the Cover Letter Agent GitHub Pages Site
+# Copilot Prompt — Build the AuthorAgent - Cover Letter GitHub Pages Site
 
 Use this prompt in GitHub Copilot to generate the site. Paste the site_content.md file as context alongside this prompt.
 
@@ -6,7 +6,7 @@ Use this prompt in GitHub Copilot to generate the site. Paste the site_content.m
 
 ## PROMPT
 
-Build a single-page GitHub Pages site from the content in site_content.md. The site should be a clean, modern landing page that explains what the Cover Letter Agent is, how to set it up, and links to the agent instructions file.
+Build a single-page GitHub Pages site from the content in site_content.md. The site should be a clean, modern landing page that explains what AuthorAgent - Cover Letter is, how to set it up, and links to the agent instructions file.
 
 ### Technical requirements:
 - Single index.html file (no build tools, no frameworks, no dependencies)
