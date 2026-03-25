@@ -506,7 +506,7 @@
             <h3>Add the instructions</h3>
             <p>You will find a field called "Custom Instructions" (sometimes labeled "Project Instructions"). This is where the agent gets its brain. Click the button below to copy the instructions, then paste them into that field.</p>
             <div class="copy-block">
-              <button class="btn btn--copy" id="copyBtn" onclick="copyInstructions()">📋 Copy Instructions to Clipboard</button>
+              <button class="btn btn--copy" id="copyBtn">📋 Copy Instructions to Clipboard</button>
               <a href="agent_instructions.md" download class="fallback-link">or download the file →</a>
             </div>
           </div>
@@ -1138,8 +1138,8 @@ Proven pattern: 2 · Final sentence names org: 1 · No banned constructions: 1 �
 `;
 
     function copyInstructions() {
-      var btn = document.getElementById('copyBtn');
-      var originalText = btn.textContent;
+      const btn = document.getElementById('copyBtn');
+      const originalText = btn.textContent;
 
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(AGENT_INSTRUCTIONS).then(function() {
@@ -1158,9 +1158,9 @@ Proven pattern: 2 · Final sentence names org: 1 · No banned constructions: 1 �
     }
 
     function fallbackCopy() {
-      var btn = document.getElementById('copyBtn');
-      var originalText = btn.textContent;
-      var textarea = document.createElement('textarea');
+      const btn = document.getElementById('copyBtn');
+      const originalText = btn.textContent;
+      const textarea = document.createElement('textarea');
       textarea.value = AGENT_INSTRUCTIONS;
       textarea.style.position = 'fixed';
       textarea.style.opacity = '0';
@@ -1168,6 +1168,7 @@ Proven pattern: 2 · Final sentence names org: 1 · No banned constructions: 1 �
       textarea.focus();
       textarea.select();
       try {
+        // execCommand is deprecated but used here as a fallback for browsers without Clipboard API support
         document.execCommand('copy');
         btn.textContent = '✅ Copied!';
         btn.style.background = '#166534';
@@ -1184,6 +1185,8 @@ Proven pattern: 2 · Final sentence names org: 1 · No banned constructions: 1 �
       }
       document.body.removeChild(textarea);
     }
+
+    document.getElementById('copyBtn').addEventListener('click', copyInstructions);
   </script>
 </body>
 </html>
