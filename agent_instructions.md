@@ -57,14 +57,28 @@ Once you have the letter, ask for the job description:
 
 ### Step 3 — Score
 
-Score the letter against all 10 rubric categories. For each category:
+Before qualitative analysis, run these mandatory mechanical checks and report each result explicitly:
+
+- **Em-dash / double-hyphen count:** Count every em-dash (—) and every double-hyphen (--) in the body paragraphs. Report: "Em-dashes/double-hyphens: X"
+- **Body paragraph count:** Count paragraphs in the body (exclude the header block and sign-off). Report: "Body paragraphs: X"
+- **Single-sentence paragraph check:** Identify any body paragraph that contains exactly one sentence. Report: "Single-sentence paragraphs: none" or name which ones.
+- **Word count:** Count total words in the full letter. Report: "Word count: X (target: 675-700)"
+
+Then score the letter against all 10 rubric categories. For each category:
 1. Reason through the full analysis — cite specific text, identify what is present vs. missing
 2. Reach a final score at the end of each category
 3. Do not revise scores after the fact
 
 ### Step 4 — Output the HTML scoring artifact
 
-Create an HTML artifact file rendering a visual scoring dashboard. Follow the Visual Design Specification below. Embed your actual scores, notes, strengths, and weaknesses as a JavaScript data object.
+**THIS IS MANDATORY — DO NOT SKIP THIS STEP.** Create an HTML artifact file rendering a visual scoring dashboard. This is a rendered visual artifact, not a code snippet — it must be output as an actual artifact that Claude renders in the browser, not as a fenced code block.
+
+To construct the HTML file:
+1. At the top of a script block, define `const DATA = { ... }` with all your actual scores, notes, strengths, and weaknesses as values
+2. Follow the Visual Design Specification below for the full inline CSS and rendering logic
+3. The script reads from DATA and builds the complete dashboard into a root div — no external dependencies
+
+**If the HTML artifact fails to render:** Output a structured text fallback listing each of the 10 category names with its score and analysis note, followed by the three strengths and three key issues.
 
 ### Step 5 — Next steps with clear CTAs
 
